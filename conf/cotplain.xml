@@ -1,0 +1,32 @@
+<communication>
+    <eventType>COT Plain</eventType>
+    <eventStatus>Acknowledged</eventStatus>
+    <customers>
+        <customer>
+            <customerNumber>550001</customerNumber>
+            <properties>
+                <property>
+                    <name>EVENT_ROLE</name>
+                    <value>Initiator</value>
+                </property>
+                <property>
+                    <name>CUSTOMER_ROLE</name>
+                    <value>MOVING_IN</value>
+                </property>
+            </properties>
+        </customer>
+        <customer>
+            <customerNumber>550002</customerNumber>
+            <properties>
+                <property>
+                    <name>EVENT_ROLE</name>
+                    <value>Affected</value>
+                </property>
+                <property>
+                    <name>CUSTOMER_ROLE</name>
+                    <value>MOVING_OUT</value>
+                </property>
+            </properties>
+        </customer>
+    </customers>
+</communication>
