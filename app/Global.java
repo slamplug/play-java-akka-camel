@@ -45,8 +45,6 @@ public class Global extends GlobalSettings {
 
         final ActorRef httpTransformer = actorSystem.actorOf(Props.create(HttpTransformer.class, camelContext));
 
-        //final ActorRef httpProducer = actorSystem.actorOf(Props.create(HttpProducer.class, httpTransformer));
-
         final ActorRef jmsConsumer = actorSystem.actorOf(Props.create(JmsConsumer.class, httpTransformer));
 
         Logger.info("Initialising Actors...OK");

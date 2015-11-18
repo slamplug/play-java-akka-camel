@@ -2,12 +2,10 @@ package actors;
 
 import akka.actor.Status;
 import akka.actor.UntypedActor;
-import akka.camel.CamelMessage;
 import binding.maxcare.Customer;
-import binding.maxcare.Response;
+import message.Customers;
 import org.apache.camel.CamelContext;
 import play.Logger;
-import utils.Utils;
 
 public class HttpTransformer extends UntypedActor {
 
@@ -18,31 +16,30 @@ public class HttpTransformer extends UntypedActor {
     }
 
     public void onReceive(Object message) throws Exception {
-        Logger.info("got message");
-        if (message instanceof CamelMessage) {
-            CamelMessage camelMessage = (CamelMessage) message;
+        Logger.info("got message " + message.getClass().getName());
+        if (message instanceof Customers) {
+            Customers customers = (Customers) message;
 
-            String body = camelMessage.getBodyAs(String.class, this.camelContext);
-            Response response = Utils.unmarshall(body, Response.class);
-            Logger.info("body: " + body);
-
-            Customer customer = response.getOk().getCustomers().getCustomerList().get(0);
-
-            if (hasEndpoint(customer)) {
-                Logger.info("endpoint endDate: " + customer.
-                        getEndpoints().
-                        getEndpointList().
-                        get(0).
-                        getEndDate());
-            } else {
-                Logger.info("no endpoints");
-            }
+            dump("MoveIn", customers.getMoveIn());
+            dump("MoveOut", customers.getMoveOut());
 
             //getSender().tell(camelMessage, getSelf());
         } else if (message instanceof Status.Failure) {
             getSender().tell(message, getSelf());
         } else
             unhandled(message);
+    }
+
+    private void dump(String direction, Customer customer) {
+        if (hasEndpoint(customer)) {
+            Logger.info(direction + ": endpoint endDate: " + customer.
+                    getEndpoints().
+                    getEndpointList().
+                    get(0).
+                    getEndDate());
+        } else {
+            Logger.info(direction + ": no endpoints");
+        }
     }
 
     private boolean hasEndpoint(Customer customer) {
